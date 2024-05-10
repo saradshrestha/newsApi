@@ -10,6 +10,11 @@ exports.profileUpdate = async (req, res) => {
             where: { id: req.user_id }, 
             attributes: { exclude: ['createdAt', 'updatedAt'] } 
           });
+
+
+
+
+          
     console.log(user);
     if (!user) return res.status(404).json(responseService.error('User Not Found', 404));
     // const { name, email } = req.body;

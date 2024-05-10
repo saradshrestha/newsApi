@@ -1,15 +1,10 @@
 'use strict';
-const {
-  Model,
-  ENUM
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+const {Sequelize, DataTypes, Model, ENUM } = require('sequelize');
+
+const sequelize = new Sequelize(require('../config/database'));
+
   class Category extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+   
     static associate(models) {
       // define association here
     }
@@ -42,6 +37,8 @@ module.exports = (sequelize, DataTypes) => {
   {
     sequelize,
     modelName: 'Category',
+    tableName: 'categories',
   });
-  return Category;
-};
+
+
+  module.exports = Category;

@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
      
       filename: async (req, file, cb) => {
         const currentDate = new Date();
-        console.log(file,'filename',this.uploadPath);
+        // console.log(file,'filename',this.uploadPath);
         const filename = file.originalname;
     
         try {

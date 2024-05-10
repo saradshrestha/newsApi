@@ -7,14 +7,28 @@ const { userProfileUpdateValidationRules, validate } = require('../app/validatio
 const upload =  require('../global/imageUpload');
 
 
+router.get('/index',
+        categoryController.index);
 
-router.post('/post/create',
+router.post('/store',
         [
-                // authMiddleware,
                 upload.single('image'), // Add file uploading middleware here
                 // userProfileUpdateValidationRules,
                 // validate,
         ],
-        categoryController.storeCategory);
-        
+        categoryController.store);
+
+router.put('/update:id',
+        [
+                upload.single('image'), // Add file uploading middleware here
+                // userProfileUpdateValidationRules,
+                // validate,
+        ],
+        categoryController.update);
+
+
+router.delete('/delete',
+        categoryController.delete);
+
+
 module.exports = router;
