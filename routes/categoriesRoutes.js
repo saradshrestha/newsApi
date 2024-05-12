@@ -18,7 +18,7 @@ router.post('/store',
         ],
         categoryController.store);
 
-router.put('/update:id',
+router.put('/update/:id',
         [
                 upload.single('image'), // Add file uploading middleware here
                 // userProfileUpdateValidationRules,

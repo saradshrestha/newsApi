@@ -4,7 +4,10 @@ const responseService = require("../../responseService/ResponseService");
 const { json } = require("body-parser");
 const { createSlug } = require("../../global/slugGenerator");
 const { storeFile } = require("../../global/FileUploader");
+const UploadFile = require("../../models/uploadFile");
 
+
+//Function - All Categories
 exports.index = async (req, res) => {
   try {
     const categories = await Category.findAll({
@@ -16,10 +19,11 @@ exports.index = async (req, res) => {
   }
 };
 
+//Function - Store Category
 exports.store = async (req, res) => {
   try {
     const { title, description } = req.body;
-    let getFile;
+    var getFile;
     if (req.file) {
       getFile = await storeFile(req.file);
     }
@@ -41,50 +45,72 @@ exports.store = async (req, res) => {
   } catch (error) {
     return responseService.error(res, error.message);
   }
-};
+}
 
+
+//Function - Update Category
 exports.update = async (req, res) => {
   try {
-    const category = await Project.findByPk(res.id);
-    if (category === null) {
-      console.log("Not found!");
-      return responseService.error("Category Not Found.", 404);
+    const category = await Category.findByPk(req.params.id);
+    if(category === null) {
+      return responseService.error(res,"Category Not Found.", 404);
     }
-    const { title, description } = req.body;
-    const slug = createSlug(title);
-    const user = await Category.update({ title, slug: slug, description });
-    if (user) {
-      return responseService.success(
+    let getFile;
+    const { title,description,status } = req.body;
+    if (req.file) {
+      if(category.image_id){
+        getFile = await updateFile(category.image_id,req.file);
+      }else{
+        getFile = await storeFile(req.file);
+      }
+    }
+
+    const categoryUpdate = await category.update({
+      title: title,
+      slug: createSlug(title),
+      description: description,
+      status: status,
+      image_id: getFile ? getFile.id : ''
+    });
+
+    if (categoryUpdate) {
+      return responseService.successMsg(
         res,
-        user,
-        "User successfully registered.",
+        "Category successfully updated.",
         200
       );
     }
     return responseService.error(res, "Something Went Wrong.", 400);
   } catch (error) {
-    console.error("Error in registerUser:", error); // Log the error
-    return responseService.error(res, error);
+    return responseService.error(res, error.message,error.code);
   }
-};
+}
 
+//Function - Delete Category
 exports.delete = async (req, res) => {
   try {
-    const { title, description } = req.body;
-    const slug = createSlug(title);
-    const user = await User.create({ title, slug: slug, description });
-    if (user) {
-      // await sendVerificationMail(user.email);
-      return responseService.success(
+    const category = await Category.findByPk(req.params.id);
+    if(category === null) {
+      return responseService.error(res,"Category Not Found.", 404);
+    }
+    if(category.image_id != null){
+      const file = await UploadFile.findByPk(category);
+      await fs.unlink(path);
+      await fs.unlink(resize_path);
+
+      await file.delete();
+    }
+    const deleteCategory = category.delete();
+    if(deleteCategory){
+      return responseService.successMsg(
         res,
-        user,
-        "User successfully registered.",
+        "Category successfully deleted.",
         200
       );
     }
     return responseService.error(res, "Something Went Wrong.", 400);
   } catch (error) {
-    console.error("Error in registerUser:", error); // Log the error
-    return responseService.error(res, error);
+    console.log(error);
+    return responseService.error(res, error.message, error.code);
   }
-};
+}

@@ -16,12 +16,12 @@ exports.registerUser = async (req, res) => {
     const user = await User.create({ name, email, password:hash });
     if(user){
       // await sendVerificationMail(user.email);
-      return res.json(responseService.success(user, 'User successfully registered.',200));
+      return responseService.success(res,user, 'User successfully registered.',200);
     } 
-    return res.json(responseService.error("Something Went Wrong."));
+    return responseService.error(res,"Something Went Wrong.",400);
   } catch (error) {
-    console.error('Error in registerUser:', error); // Log the error
-    return res.json(responseService.error('An unexpected error occurred.'));
+    console.log('Error in registerUser:', error); // Log the error
+    return responseService.error(res,error.message,error.code);
   }
 };
 
