@@ -1,26 +1,27 @@
-// controllers/categoryController.js
-const Category = require("../../models/category");
+// controllers/newsController.js
+
+const News = require("../../models/category");
 const responseService = require("../../responseService/ResponseService");
-// const { json } = require("body-parser");
+const { json } = require("body-parser");
 const { createSlug } = require("../../global/slugGenerator");
 const { storeFile } = require("../../global/FileUploader");
-const { allCategoryResource } = require('../../app/apiResource/categoryResource');
+const UploadFile = require("../../models/uploadFile");
 
 
 //Function - All Categories
 exports.index = async (req, res) => {
   try {
-    const categories = await Category.findAll({
-      attributes:['title','slug','status','description','image_id']
+    const categories = await News.findAll({
+      attributes:['title','slug','status','description','feature_image']
     });
-    const resourceCategories = await allCategoryResource(categories);
-    return responseService.success(res,resourceCategories, 'Successfully Fetched.', 200);
+    
+    return responseService.success(res,categories, 'Successfully Fetched.', 200);
   } catch (error) {
     return responseService.error(res, error);
   }
 };
 
-//Function - Store Category
+//Function - Store News
 exports.store = async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -28,7 +29,7 @@ exports.store = async (req, res) => {
     if (req.file) {
       getFile = await storeFile(req.file);
     }
-    const category = await Category.create({
+    const category = await News.create({
       title: title,
       slug: createSlug(title),
       description: description,
@@ -49,12 +50,12 @@ exports.store = async (req, res) => {
 }
 
 
-//Function - Update Category
+//Function - Update News
 exports.update = async (req, res) => {
   try {
-    const category = await Category.findByPk(req.params.id);
+    const category = await News.findByPk(req.params.id);
     if(category === null) {
-      return responseService.error(res,"Category Not Found.", 404);
+      return responseService.error(res,"News Not Found.", 404);
     }
     let getFile;
     const { title,description,status } = req.body;
@@ -77,7 +78,7 @@ exports.update = async (req, res) => {
     if (categoryUpdate) {
       return responseService.successMsg(
         res,
-        "Category successfully updated.",
+        "News successfully updated.",
         200
       );
     }
@@ -87,12 +88,12 @@ exports.update = async (req, res) => {
   }
 }
 
-//Function - Delete Category
+//Function - Delete News
 exports.delete = async (req, res) => {
   try {
-    const category = await Category.findByPk(req.params.id);
+    const category = await News.findByPk(req.params.id);
     if(category === null) {
-      return responseService.error(res,"Category Not Found.", 404);
+      return responseService.error(res,"News Not Found.", 404);
     }
     if(category.image_id != null){
       const file = await UploadFile.findByPk(category);
@@ -101,11 +102,11 @@ exports.delete = async (req, res) => {
 
       await file.delete();
     }
-    const deleteCategory = category.delete();
-    if(deleteCategory){
+    const deleteNews = category.delete();
+    if(deleteNews){
       return responseService.successMsg(
         res,
-        "Category successfully deleted.",
+        "News successfully deleted.",
         200
       );
     }
