@@ -2,14 +2,14 @@
 
 const express = require('express');
 const router = express.Router();
-const categoryController = require('../app/controllers/categoryController');
+const newsController = require('../app/controllers/newsController');
 const authMiddleware = require('../app/middlewares/authMiddleware');
 const { userProfileUpdateValidationRules, validate } = require('../app/validations/userProfileUpdateValidation');
 const upload =  require('../global/imageUpload');
 
 
 router.get('/index',
-        categoryController.index);
+        newsController.index);
 
 router.post('/store',
         [
@@ -17,7 +17,7 @@ router.post('/store',
                 // userProfileUpdateValidationRules,
                 // validate,
         ],
-        categoryController.store);
+        newsController.store);
 
 router.put('/update/:id',
         [
@@ -25,11 +25,11 @@ router.put('/update/:id',
                 // userProfileUpdateValidationRules,
                 // validate,
         ],
-        categoryController.update);
+        newsController.update);
 
 
 router.delete('/delete',
-        categoryController.delete);
+        newsController.delete);
 
 
 module.exports = router;

@@ -9,15 +9,16 @@ const { allCategoryResource } = require('../../app/apiResource/categoryResource'
 
 //Function - All Categories
 exports.index = async (req, res) => {
-  try {
+  // try {
+    // return res.send('aksdh')
     const categories = await Category.findAll({
       attributes:['title','slug','status','description','image_id']
     });
     const resourceCategories = await allCategoryResource(categories);
     return responseService.success(res,resourceCategories, 'Successfully Fetched.', 200);
-  } catch (error) {
-    return responseService.error(res, error);
-  }
+  // } catch (error) {
+  //   return responseService.error(res, error);
+  // }
 };
 
 //Function - Store Category
@@ -32,7 +33,7 @@ exports.store = async (req, res) => {
       title: title,
       slug: createSlug(title),
       description: description,
-      image_id: getFile ? getFile.id : "",
+      image_id: getFile ? getFile.id : null,
     });
     if (category) {
       return responseService.success(
@@ -95,11 +96,7 @@ exports.delete = async (req, res) => {
       return responseService.error(res,"Category Not Found.", 404);
     }
     if(category.image_id != null){
-      const file = await UploadFile.findByPk(category);
-      await fs.unlink(path);
-      await fs.unlink(resize_path);
-
-      await file.delete();
+     const file = await deleteFile(news.feature_image);
     }
     const deleteCategory = category.delete();
     if(deleteCategory){

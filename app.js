@@ -11,6 +11,9 @@ const mainRoutes = require('./routes/mainRoutes');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+app.use(express.static('public'));
+app.use('/uploads', express.static('uploads'));
+
 app.use(express.json()); // for parsing application/json
 
 app.use('/api', mainRoutes);

@@ -7,8 +7,7 @@ const { userProfileUpdateValidationRules, validate } = require('../app/validatio
 const upload =  require('../global/imageUpload');
 
 
-router.get('/index',
-        categoryController.index);
+router.get('/index',categoryController.index);
 
 router.post('/store',
         [

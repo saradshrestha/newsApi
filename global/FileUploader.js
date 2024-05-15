@@ -6,15 +6,17 @@ const fs = require("fs");
 async function storeFile(file) {
   try {
     const { filename, path, mimetype, size } = file;
+    const newpath = path.replace(/\\/g, '/');
     const uploadFile = await UploadFile.create({
       filename,
-      path,
-      resize_path: path,
+      path:newpath,
+      resize_path: newpath,
       ext: mimetype,
     });
     return uploadFile;
   } catch (error) {
-    throw error;
+    console.log(error.message);
+    throw error.message;
   }
 }
 
@@ -60,9 +62,9 @@ async function deleteFile(file_id) {
 
   async function getFilePath(file_id) {
     try {
-      console.log(file_id);
       const getFile = await UploadFile.findByPk(file_id);
       if (getFile) {
+        console.log(getFile.path);
         return getFile.path;
       }
       throw error("File not found");
