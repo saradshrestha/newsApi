@@ -13,7 +13,7 @@ router.get('/index',
 
 router.post('/store',
         [
-                upload.single('image'), // Add file uploading middleware here
+                upload.single('feature_image'), // Add file uploading middleware here
                 // userProfileUpdateValidationRules,
                 // validate,
         ],

@@ -1,13 +1,15 @@
 'use strict';
-const {Sequelize, DataTypes, Model, ENUM } = require('sequelize');
+const {Sequelize, DataTypes, Model } = require('sequelize');
 
 const sequelize = new Sequelize(require('../config/database'));
+const News = require('./news');
+
 
   class Category extends Model {
-   
-    static associate(models) {
-      // define association here
-    }
+    // static associate(models) {
+    //   Category.hasMany(models.News, {
+    //   });
+    // }
   }
   Category.init({ 
     title: {
@@ -39,6 +41,7 @@ const sequelize = new Sequelize(require('../config/database'));
     modelName: 'Category',
     tableName: 'categories',
   });
+
 
 
   module.exports = Category;

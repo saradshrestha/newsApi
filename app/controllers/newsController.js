@@ -1,21 +1,26 @@
 // controllers/newsController.js
-
-const News = require("../../models/news");
 const responseService = require("../../responseService/ResponseService");
-const { json } = require("body-parser");
 const { createSlug } = require("../../global/slugGenerator");
 const { storeFile, updateFile, deleteFile } = require("../../global/FileUploader");
+const { allNewsCollection } = require("../apiResource/newsResource");
+const { News } = require('../../models/index');
+
 const UploadFile = require("../../models/uploadFile");
 
 
 //Function - All Categories
 exports.index = async (req, res) => {
   try {
-    const categories = await News.findAll({
-      attributes:['title','slug','status','description','feature_image']
+    const allNews = await News.findAll({
+      include:'category'
+      // [{
+      //   model:Category,
+      //   as:'category',
+      //   attributes:['id','title','image_id','status']
+      // }]
     });
-    
-    return responseService.success(res,categories, 'Successfully Fetched.', 200);
+    const resourceNews = await allNewsCollection(allNews);
+    return responseService.success(res,resourceNews, 'Successfully Fetched.', 200);
   } catch (error) {
     return responseService.error(res, error);
   }
@@ -24,21 +29,22 @@ exports.index = async (req, res) => {
 //Function - Store News
 exports.store = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description,category_id } = req.body;
     var getFile;
     if (req.file) {
       getFile = await storeFile(req.file);
     }
-    const category = await News.create({
+    const news = await News.create({
       title: title,
       slug: createSlug(title),
       description: description,
       feature_image: getFile ? getFile.id : "",
+      category_id : category_id
     });
-    if (category) {
+    if (news) {
       return responseService.success(
         res,
-        category,
+        news,
         "News Successfully Saved.",
         200
       );

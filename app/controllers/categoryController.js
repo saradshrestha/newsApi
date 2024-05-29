@@ -4,21 +4,21 @@ const responseService = require("../../responseService/ResponseService");
 // const { json } = require("body-parser");
 const { createSlug } = require("../../global/slugGenerator");
 const { storeFile } = require("../../global/FileUploader");
-const { allCategoryResource } = require('../../app/apiResource/categoryResource');
+const { allCategoryCollection,categoryResource } = require('../../app/apiResource/categoryResource');
 
 
 //Function - All Categories
 exports.index = async (req, res) => {
-  // try {
+  try {
     // return res.send('aksdh')
     const categories = await Category.findAll({
-      attributes:['title','slug','status','description','image_id']
+      attributes:['id','title','slug','status','description','image_id']
     });
-    const resourceCategories = await allCategoryResource(categories);
+    const resourceCategories = await allCategoryCollection(categories);
     return responseService.success(res,resourceCategories, 'Successfully Fetched.', 200);
-  // } catch (error) {
-  //   return responseService.error(res, error);
-  // }
+  } catch (error) {
+    return responseService.error(res, error);
+  }
 };
 
 //Function - Store Category

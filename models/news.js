@@ -1,45 +1,50 @@
 'use strict';
 
-const {Sequelize, DataTypes, Model, ENUM } = require('sequelize');
+const {Sequelize, DataTypes, Model} = require('sequelize');
 const sequelize = new Sequelize(require('../config/database'));
+const Category = require('./category');
 
-  class News extends Model {
-    static associate(models) {
-      // define association here
-    }
+class News extends Model {
+  // static associate(models) {
+  //   News.belongsTo(models.Category, {
+  //     foreignKey: 'category_id',
+  //     as: 'category' // Alias for the association
+  //   });
+  // }
+}
+
+News.init({
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  slug: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true, // Ensure email is unique
+  },
+  status:{
+    type:DataTypes.ENUM,
+    values:['Active','Inactive'],
+    allowNull:false,
+    defaultValue:"Active"
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  feature_image: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  category_id:{
+    type: DataTypes.BIGINT,
+    allowNull: false,
   }
-  News.init({
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    slug: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true, // Ensure email is unique
-    },
-    status:{
-      type:DataTypes.ENUM,
-      values:['Active','Inactive'],
-      allowNull:false,
-      defaultValue:"Active"
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    feature_image: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    category_id:{
-      type: DataTypes.BIGINT,
-      allowNull: false,
-    }
-  }, {
-    sequelize,
-    modelName: 'News',
-  });
+}, {
+  sequelize,
+  modelName: 'News',
+});
 
 
-  module.exports = News;
+module.exports = News;
