@@ -1,5 +1,8 @@
 // controllers/newsController.js
+
+
 const responseService = require("../../responseService/ResponseService");
+// const { json } = require("body-parser");
 const { createSlug } = require("../../global/slugGenerator");
 const { storeFile, updateFile, deleteFile } = require("../../global/FileUploader");
 const { allNewsCollection } = require("../apiResource/newsResource");

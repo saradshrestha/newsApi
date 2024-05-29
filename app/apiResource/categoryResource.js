@@ -41,7 +41,7 @@ async function categoryResource(category) {
         id: category.id,
         title: category.title,
         slug: category.slug,
-        status: category.status,
+        // status: category.status,
         description: category.description,
         imagePath: filePath
       };

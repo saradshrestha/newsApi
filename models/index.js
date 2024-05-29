@@ -25,11 +25,11 @@ db.News = News;
 Category.hasMany(News, {
     foreignKey: 'category_id',
     as: 'news'
-  });
+});
 
 News.belongsTo(Category, {
-foreignKey: 'category_id',
-as: 'category'
+  foreignKey: 'category_id',
+  as: 'category'
 });
 
 db.sequelize = sequelize;
