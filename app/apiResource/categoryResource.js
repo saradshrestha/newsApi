@@ -46,7 +46,7 @@ async function categoryResource(category) {
         imagePath: filePath
       };
       
-      console.log(modifiedCategory,'from Category Resource');
+      // console.log(modifiedCategory,'from Category Resource');
     return modifiedCategory;
   } catch (error) {
     throw error.message;

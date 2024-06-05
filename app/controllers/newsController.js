@@ -9,13 +9,16 @@ const { allNewsCollection } = require("../apiResource/newsResource");
 const { News } = require('../../models/index');
 
 const UploadFile = require("../../models/uploadFile");
+const NewsImage = require("../../models/newimage");
+
+
 
 
 //Function - All Categories
 exports.index = async (req, res) => {
   try {
     const allNews = await News.findAll({
-      include:'category'
+      include:'category',
       // [{
       //   model:Category,
       //   as:'category',
@@ -33,18 +36,34 @@ exports.index = async (req, res) => {
 exports.store = async (req, res) => {
   try {
     const { title, description,category_id } = req.body;
-    var getFile;
-    if (req.file) {
-      getFile = await storeFile(req.file);
+  
+    var featureImage = req.files['feature_image'] ? req.files['feature_image'][0] : null;
+    var images = req.files['images'] || [];
+  
+    if (featureImage) {
+      featureImage = await storeFile(featureImage);
     }
+    //  return res.json(featureImage);
     const news = await News.create({
       title: title,
       slug: createSlug(title),
       description: description,
-      feature_image: getFile ? getFile.id : "",
+      feature_image: featureImage ? featureImage.id : "",
       category_id : category_id
     });
+    
     if (news) {
+      if (images && images.length > 0) { // Check if images array exists and is not empty
+        const storedImages = [];
+        for (const element of images) {
+          const image = await storeFile(element);
+          const newsImage = await NewsImage.create({
+            news_id: news.id,
+            image_id: image.id,
+          });
+          storedImages.push(newsImage); // Store the newsImage object if needed
+        }
+      }
       return responseService.success(
         res,
         news,

@@ -4,20 +4,23 @@ const UploadFile = require("../models/uploadFile");
 const fs = require("fs");
 
 async function storeFile(file) {
-  try {
+  // try {
     const { filename, path, mimetype, size } = file;
     const newpath = path.replace(/\\/g, '/');
+    console.log(file,'newpath1');
+
     const uploadFile = await UploadFile.create({
-      filename,
-      path:newpath,
-      resize_path: newpath,
+      filename:filename,
+      path: path,
+      resize_path: path,
       ext: mimetype,
     });
+    
     return uploadFile;
-  } catch (error) {
-    console.log(error.message);
-    throw error.message;
-  }
+  // } catch (error) {
+  //   console.log(error.message);
+  //   throw error.message;
+  // }
 }
 
 async function updateFile(file_id, file) {

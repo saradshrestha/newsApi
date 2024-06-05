@@ -12,8 +12,14 @@ router.get('/index',
         newsController.index);
 
 router.post('/store',
-        [
-                upload.single('feature_image'), // Add file uploading middleware here
+[
+        upload.fields([
+                { name: 'feature_image', maxCount: 1 }, 
+                { name: 'images', maxCount: 10 }
+                ]), 
+                    
+
+                // Add file uploading middleware here
                 // userProfileUpdateValidationRules,
                 // validate,
         ],

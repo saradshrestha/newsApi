@@ -5,12 +5,12 @@ const sequelize = new Sequelize(require('../config/database'));
 const Category = require('./category');
 
 class News extends Model {
-  // static associate(models) {
-  //   News.belongsTo(models.Category, {
-  //     foreignKey: 'category_id',
-  //     as: 'category' // Alias for the association
-  //   });
-  // }
+  static associate(models) {
+    News.belongsTo(models.Category, {
+      foreignKey: 'category_id',
+      as: 'category' // Alias for the association
+    });
+  }
 }
 
 News.init({
