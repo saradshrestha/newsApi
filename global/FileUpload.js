@@ -1,13 +1,14 @@
-// multerConfig.js
+/* FileUpload.js
+    Used for file/image upload to the node system with specific path 
+*/
 const multer = require('multer');
-const path = require('path'); // Import path module
-const fs = require('fs'); // Import path module
-const sharp = require('sharp'); 
+const path = require('path'); 
+const fs = require('fs'); 
+const sharp = require('sharp'); //used for resize image
 
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // console.log(file,req,'storeage');
         const currentDate = new Date();
         const year = currentDate.getFullYear();
         const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -15,8 +16,6 @@ const storage = multer.diskStorage({
         const uploadPath = `uploads/${year}/${month}`;
 
         fs.mkdirSync(uploadPath, { recursive: true });
-        
-        // console.log('uploadPath');
 
         this.uploadPath = uploadPath;
         cb(null, uploadPath);
@@ -24,15 +23,12 @@ const storage = multer.diskStorage({
      
       filename: async (req, file, cb) => {
         const currentDate = new Date();
-        // console.log(file,'filename',this.uploadPath);
         const filename = file.originalname;
-    
         try {
             if (file.mimetype.startsWith('image/jpg')) {
                 const resizePath = path.join(this.uploadPath, 'resized');
                 await sharp(file.path).resize({ width: 300, height: 300 }).toFile(path.join(resizePath, filename));
             }
-            
             cb(null, filename);
         } catch (error) {
             console.error('Error processing image:', error);

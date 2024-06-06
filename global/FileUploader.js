@@ -1,4 +1,5 @@
 //FileUploder.js
+//Required for storing file/image infomation to the database
 
 const UploadFile = require("../models/uploadFile");
 const fs = require("fs");
@@ -67,7 +68,6 @@ async function deleteFile(file_id) {
     try {
       const getFile = await UploadFile.findByPk(file_id);
       if (getFile) {
-        console.log(getFile.path);
         return getFile.path;
       }
       throw error("File not found");

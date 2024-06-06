@@ -7,12 +7,19 @@ const sequelize = require('../config/database'); // Adjust the path as needed
 
 const Category = require('./category'); // Ensure correct import path
 const News = require('./news'); // Ensure correct import path
+const NewImage = require('./newImage'); // Ensure correct import path
+const UploadFile = require('./uploadFile'); // Ensure correct import path
+
+
 
 const db = {};
 
 // Add models to the db object
 db.Category = Category;
 db.News = News;
+db.NewImage = NewImage;
+db.UploadFile = UploadFile;
+
 
 
 // Set up associations

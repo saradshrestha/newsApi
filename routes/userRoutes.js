@@ -4,7 +4,7 @@ const router = express.Router();
 const userController = require('../app/controllers/userController');
 const authMiddleware = require('../app/middlewares/authMiddleware');
 const { userProfileUpdateValidationRules, validate } = require('../app/validations/userProfileUpdateValidation');
-const upload =  require('../global/imageUpload');
+const upload =  require('../global/FileUpload');
 
 
 

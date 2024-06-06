@@ -41,12 +41,10 @@ async function categoryResource(category) {
         id: category.id,
         title: category.title,
         slug: category.slug,
-        // status: category.status,
         description: category.description,
         imagePath: filePath
       };
       
-      // console.log(modifiedCategory,'from Category Resource');
     return modifiedCategory;
   } catch (error) {
     throw error.message;

@@ -6,7 +6,12 @@ const sequelize = new Sequelize(require('../config/database'));
   class NewImage extends Model {
     
     static associate(models) {
-      // define association here
+      // NewImage.belongsToMany(models.UploadFile, {
+      //   through: 'NewImage',
+      //   foreignKey: 'image_id',
+      //   otherKey: 'news_id',
+      //   as: 'news' // Alias for the association
+      // });
     }
   }
   NewImage.init({
@@ -22,6 +27,7 @@ const sequelize = new Sequelize(require('../config/database'));
   }, {
     sequelize,
     modelName: 'NewImage',
+    timestamps: true
   });
   
   

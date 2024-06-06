@@ -2,13 +2,20 @@
 
 const {Sequelize, DataTypes, Model} = require('sequelize');
 const sequelize = new Sequelize(require('../config/database'));
-const Category = require('./category');
+// const Category = require('./category');
 
 class News extends Model {
   static associate(models) {
     News.belongsTo(models.Category, {
       foreignKey: 'category_id',
       as: 'category' // Alias for the association
+    });
+
+    News.belongsToMany(models.UploadFile, {
+      through: models.NewImage,
+      foreignKey: 'news_id',
+      otherKey: 'image_id',
+      as: 'uploadFiles'
     });
   }
 }

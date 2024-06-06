@@ -8,9 +8,6 @@ const { storeFile, updateFile, deleteFile } = require("../../global/FileUploader
 const { allNewsCollection } = require("../apiResource/newsResource");
 const { News } = require('../../models/index');
 
-const UploadFile = require("../../models/uploadFile");
-const NewsImage = require("../../models/newimage");
-
 
 
 
@@ -18,12 +15,7 @@ const NewsImage = require("../../models/newimage");
 exports.index = async (req, res) => {
   try {
     const allNews = await News.findAll({
-      include:'category',
-      // [{
-      //   model:Category,
-      //   as:'category',
-      //   attributes:['id','title','image_id','status']
-      // }]
+      include:['category','uploadFiles']
     });
     const resourceNews = await allNewsCollection(allNews);
     return responseService.success(res,resourceNews, 'Successfully Fetched.', 200);
@@ -43,7 +35,6 @@ exports.store = async (req, res) => {
     if (featureImage) {
       featureImage = await storeFile(featureImage);
     }
-    //  return res.json(featureImage);
     const news = await News.create({
       title: title,
       slug: createSlug(title),
